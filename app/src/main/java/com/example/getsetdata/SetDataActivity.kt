@@ -1,6 +1,7 @@
 package com.example.getsetdata
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -23,11 +24,12 @@ import com.google.firebase.storage.ktx.storage
 
 class SetDataActivity : AppCompatActivity() {
 
-    private  lateinit var imageView: ImageView
-    private lateinit var selectImgBtn: Button
-    private lateinit var uploadImgBtn: Button
-    private var storageRef=Firebase.storage
-    private lateinit var uri:Uri
+      lateinit var imageView: ImageView
+    lateinit var selectImgBtn: Button
+     lateinit var uploadImgBtn: Button
+     var storageRef=Firebase.storage.reference
+     lateinit var uri:Uri
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,29 +64,34 @@ class SetDataActivity : AppCompatActivity() {
             galleryImage.launch("image/*")
         }
 
-//        uploadImgBtn.setOnClickListener {
-//          storageRef.getReference("Images").child(System.currentTimeMillis().toString())
-//              .putFile(uri)
-//              .addOnuccessListener { task ->
-//                  task.metadata!!.refrence!!.downloadUrl
-//                      .addOnSuccessListener { uri ->
-//                          val uid = firebaseAuth.getInstance().currentUser!!.uid
-//                          val imageMap = mapOf(
-//                              "url" to uri.toString()
-//                          )
-//
-//                          val databasesRefrence =
-//                              FirebaseDatabase.getInstance().getReference("userImages")
-//                          databasesRefrence.child(uid).setValue(imageMap)
-//                              .addOnSuccessListener {
-//                                  Toast.makeText(this, "successful", Toast.LENGTH_SHORT).show()
-//                              }
-//                              .addOnFailureListner {
-//                                  Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
-//                              }
-//                      }
-//              }
-//        }
+
+        uploadImgBtn.setOnClickListener {
+            if (uri != null) {
+                val fileName = System.currentTimeMillis().toString()
+                val imageRef = storageRef.child("image/").child(fileName)
+
+                imageRef.putFile(uri)
+                    .addOnSuccessListener { taskSnapshot ->
+                        // File uploaded successfully
+                        Toast.makeText(this, "Upload success", Toast.LENGTH_SHORT).show()
+
+                        taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUri ->
+                            val downloadUrl = downloadUri.toString()
+                            // Process the download URL or save it to the database
+                        }.addOnFailureListener { exception ->
+                            Toast.makeText(this, exception.toString() + "download URL", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        // File upload failed, handle the error
+                        Toast.makeText(this, "Upload image $exception", Toast.LENGTH_SHORT).show()
+                    }
+            } else {
+                Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
 
         DeleteBtn.setOnClickListener {
             db.collection("users").document("2PuTRAkDKo1x0p18YGCb"
@@ -132,6 +139,9 @@ class SetDataActivity : AppCompatActivity() {
 
 
     }
+
+
+
 
 
 }

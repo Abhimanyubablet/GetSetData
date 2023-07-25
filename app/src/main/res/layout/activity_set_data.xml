@@ -91,3 +91,38 @@
     </LinearLayout>
 </ScrollView>
 </LinearLayout>
+
+
+
+
+<!--    private val changeImage =-->
+<!--    registerForActivityResult(-->
+<!--    ActivityResultContracts.StartActivityForResult()-->
+<!--    ) { result ->-->
+<!--    if (result.resultCode == Activity.RESULT_OK) {-->
+<!--    val data = result.data-->
+<!--    val imgUri = data?.data-->
+<!--    imageView.setImageURI(imgUri)-->
+
+<!--    if (imgUri != null) {-->
+<!--    val fileName = System.currentTimeMillis().toString()-->
+<!--    val imageRef = storageRef.child("image/").child(fileName)-->
+
+<!--    imageRef.putFile(imgUri)-->
+<!--    .addOnSuccessListener { taskSnapshot ->-->
+<!--    // File downloaded successfully-->
+<!--    Toast.makeText(this, "upload success", Toast.LENGTH_SHORT).show()-->
+<!--    taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->-->
+<!--    val downloadUrl = uri.toString()-->
+<!--    // Process the downloaded file or handle the download URL-->
+<!--    }.addOnFailureListener { exception ->-->
+<!--    Toast.makeText(this, exception.toString()+"download url", Toast.LENGTH_SHORT).show()-->
+<!--    }-->
+<!--    }-->
+<!--    .addOnFailureListener { exception ->-->
+<!--    // File download failed, handle the error-->
+<!--    Toast.makeText(this, "upload image$exception", Toast.LENGTH_SHORT).show()-->
+<!--    }-->
+<!--    }-->
+<!--    }-->
+<!--    }-->
